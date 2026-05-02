@@ -1,0 +1,11 @@
+{
+  "PrivateKeyPath": "./keys/agent-c-private.pem",
+  "Peers": ["tls://127.0.0.1:9001"],
+  "api_port": 9022,
+  "bridge_addr": "127.0.0.1",
+  "tcp_port": 7002,
+  "router_addr": "http://127.0.0.1",
+  "router_port": 9023,
+  "a2a_addr": "http://127.0.0.1",
+  "a2a_port": 9024
+}

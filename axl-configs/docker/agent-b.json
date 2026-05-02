@@ -1,0 +1,11 @@
+{
+  "PrivateKeyPath": "/keys/agent-b-private.pem",
+  "Peers": ["tls://axl-bootstrap:9001"],
+  "api_port": 9012,
+  "bridge_addr": "0.0.0.0",
+  "tcp_port": 7000,
+  "router_addr": "http://agent-b",
+  "router_port": 9013,
+  "a2a_addr": "http://agent-b",
+  "a2a_port": 9014
+}

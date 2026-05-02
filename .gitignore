@@ -1,0 +1,149 @@
+# ========================
+
+# Node / Frontend (Vite/React)
+
+# ========================
+
+node_modules/
+dist/
+build/
+.cache/
+.vite/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+
+.env
+.env.*
+!.env.example
+
+# ========================
+
+# Python
+
+# ========================
+
+**pycache**/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+venv/
+.venv/
+.venv-wsl/
+env/
+ENV/
+*.sqlite3
+
+# ========================
+
+# Solidity / Hardhat
+
+# ========================
+
+artifacts/
+cache/
+typechain/
+typechain-types/
+coverage/
+coverage.json
+
+# ========================
+
+# Foundry
+
+# ========================
+
+out/
+broadcast/
+forge-cache/
+cache_forge/
+
+# ========================
+
+# Logs
+
+# ========================
+
+logs/
+*.log
+
+# ========================
+
+# OS Files
+
+# ========================
+
+.DS_Store
+Thumbs.db
+
+# ========================
+
+# IDE / Editor
+
+# ========================
+
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ========================
+
+# Docker
+
+# ========================
+
+docker-data/
+*.pid
+*.seed
+
+# ========================
+
+# Keys / Secrets (IMPORTANT)
+
+# ========================
+
+keys/
+*.pem
+*.key
+*.env.local
+*.secret
+
+# ========================
+
+# Misc
+
+# ========================
+
+.tmp/
+temp/
+*.tmp
+
+# ========================
+
+# Test / Coverage Outputs
+
+# ========================
+
+coverage/
+htmlcov/
+.pytest_cache/
+
+# ========================
+
+# Build Artifacts
+
+# ========================
+
+*.tsbuildinfo
+
+public/agentmarket-network.json
+
+public/market-metadata.json
+
+.appdata/

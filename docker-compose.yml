@@ -1,0 +1,208 @@
+version: "3.9"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# AgentMarket — Docker Compose
+# Runs 3 autonomous AI agents on separate AXL nodes for hackathon demo.
+#
+# Usage:
+#   docker-compose up --build
+#   docker-compose logs -f agent-a   # watch Agent A
+#
+# Each agent has:
+#   - Its own AXL node (separate container, separate key, separate port)
+#   - Its own Python agent process
+#   - Its own MCP server (market_intel, vote_intention)
+#   - Shared view of Ethereum + 0G Storage
+# ═══════════════════════════════════════════════════════════════════════════════
+
+networks:
+  agentmarket:
+    driver: bridge
+
+# ─── AXL Bootstrap Node ───────────────────────────────────────────────────────
+services:
+  axl-bootstrap:
+    image: ghcr.io/gensyn-ai/axl:latest
+    container_name: axl-bootstrap
+    command: ["axl", "-config", "/config/docker/agent-a.json"]
+    volumes:
+      - ./axl-configs:/config
+      - ./keys:/keys
+    ports:
+      - "9001:9001"   # Yggdrasil mesh
+      - "9002:9002"   # HTTP API (Agent A)
+      - "9003:9003"   # MCP router (Agent A)
+      - "9004:9004"   # A2A server (Agent A)
+    networks:
+      - agentmarket
+    restart: unless-stopped
+
+# ─── Agent A: Market Creator ──────────────────────────────────────────────────
+  agent-a:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agent-a
+    depends_on:
+      - axl-bootstrap
+    environment:
+      - AGENT_NAME=AgentMarket-Creator
+      - AGENT_PRIVATE_KEY=${AGENT_A_PRIVATE_KEY}
+      - AXL_API_BASE=http://axl-bootstrap:9002
+      - AXL_MCP_PORT=9003
+      - AXL_A2A_PORT=9004
+      - EVM_RPC_URL=${EVM_RPC_URL}
+      - CHAIN_ID=${CHAIN_ID}
+      - ZG_STORAGE_RPC=${ZG_STORAGE_RPC}
+      - ZG_INDEXER_RPC=${ZG_INDEXER_RPC}
+      - ZG_KV_RPC=${ZG_KV_RPC}
+      - ZG_COMPUTE_BROKER=${ZG_COMPUTE_BROKER}
+      - ZG_INFERENCE_MODEL=${ZG_INFERENCE_MODEL}
+      - ZG_CHAIN_RPC=${ZG_CHAIN_RPC}
+      - INFT_CONTRACT=${INFT_CONTRACT}
+      - MIN_BET_PRED=10
+      - MAX_BET_PRED=200
+      - MIN_CONFIDENCE=0.65
+      - STAKE_AMOUNT_PRED=1000
+      - REQUIRE_POIR=true
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./deployments:/app/deployments
+    networks:
+      - agentmarket
+    restart: unless-stopped
+    command: ["python", "agent.py"]
+
+# ─── AXL Node B ───────────────────────────────────────────────────────────────
+  axl-b:
+    image: ghcr.io/gensyn-ai/axl:latest
+    container_name: axl-b
+    command: ["axl", "-config", "/config/docker/agent-b.json"]
+    volumes:
+      - ./axl-configs:/config
+      - ./keys:/keys
+    ports:
+      - "9011:9011"
+      - "9012:9012"
+      - "9013:9013"
+      - "9014:9014"
+    networks:
+      - agentmarket
+    depends_on:
+      - axl-bootstrap
+    restart: unless-stopped
+
+# ─── Agent B: Bettor ──────────────────────────────────────────────────────────
+  agent-b:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agent-b
+    depends_on:
+      - axl-b
+    environment:
+      - AGENT_NAME=AgentMarket-Bettor
+      - AGENT_PRIVATE_KEY=${AGENT_B_PRIVATE_KEY}
+      - AXL_API_BASE=http://axl-b:9012
+      - AXL_MCP_PORT=9013
+      - AXL_A2A_PORT=9014
+      - EVM_RPC_URL=${EVM_RPC_URL}
+      - CHAIN_ID=${CHAIN_ID}
+      - ZG_STORAGE_RPC=${ZG_STORAGE_RPC}
+      - ZG_INDEXER_RPC=${ZG_INDEXER_RPC}
+      - ZG_KV_RPC=${ZG_KV_RPC}
+      - ZG_COMPUTE_BROKER=${ZG_COMPUTE_BROKER}
+      - ZG_INFERENCE_MODEL=${ZG_INFERENCE_MODEL}
+      - ZG_CHAIN_RPC=${ZG_CHAIN_RPC}
+      - INFT_CONTRACT=${INFT_CONTRACT}
+      - MIN_BET_PRED=20
+      - MAX_BET_PRED=300
+      - MIN_CONFIDENCE=0.70
+      - STAKE_AMOUNT_PRED=1000
+      - REQUIRE_POIR=true
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./deployments:/app/deployments
+    networks:
+      - agentmarket
+    restart: unless-stopped
+    command: ["python", "agent.py"]
+
+# ─── AXL Node C ───────────────────────────────────────────────────────────────
+  axl-c:
+    image: ghcr.io/gensyn-ai/axl:latest
+    container_name: axl-c
+    command: ["axl", "-config", "/config/docker/agent-c.json"]
+    volumes:
+      - ./axl-configs:/config
+      - ./keys:/keys
+    ports:
+      - "9021:9021"
+      - "9022:9022"
+      - "9023:9023"
+      - "9024:9024"
+    networks:
+      - agentmarket
+    depends_on:
+      - axl-bootstrap
+    restart: unless-stopped
+
+# ─── Agent C: Resolver ────────────────────────────────────────────────────────
+  agent-c:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agent-c
+    depends_on:
+      - axl-c
+    environment:
+      - AGENT_NAME=AgentMarket-Resolver
+      - AGENT_PRIVATE_KEY=${AGENT_C_PRIVATE_KEY}
+      - AXL_API_BASE=http://axl-c:9022
+      - AXL_MCP_PORT=9023
+      - AXL_A2A_PORT=9024
+      - EVM_RPC_URL=${EVM_RPC_URL}
+      - CHAIN_ID=${CHAIN_ID}
+      - ZG_STORAGE_RPC=${ZG_STORAGE_RPC}
+      - ZG_INDEXER_RPC=${ZG_INDEXER_RPC}
+      - ZG_KV_RPC=${ZG_KV_RPC}
+      - ZG_COMPUTE_BROKER=${ZG_COMPUTE_BROKER}
+      - ZG_INFERENCE_MODEL=${ZG_INFERENCE_MODEL}
+      - ZG_CHAIN_RPC=${ZG_CHAIN_RPC}
+      - INFT_CONTRACT=${INFT_CONTRACT}
+      - MIN_BET_PRED=5
+      - MAX_BET_PRED=150
+      - MIN_CONFIDENCE=0.60
+      - STAKE_AMOUNT_PRED=1000
+      - REQUIRE_POIR=true
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./deployments:/app/deployments
+    networks:
+      - agentmarket
+    restart: unless-stopped
+    command: ["python", "agent.py"]
+
+# ─── Dashboard (optional) ─────────────────────────────────────────────────────
+  dashboard:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_RPC_URL: ${EVM_RPC_URL}
+        VITE_REGISTRY_ADDR: ${AGENT_REGISTRY_ADDRESS}
+        VITE_FACTORY_ADDR: ${MARKET_FACTORY_ADDRESS}
+        VITE_RESOLVER_ADDR: ${COLLECTIVE_RESOLVER_ADDRESS}
+    container_name: dashboard
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_RPC_URL=${EVM_RPC_URL}
+      - VITE_REGISTRY_ADDR=${AGENT_REGISTRY_ADDRESS}
+      - VITE_FACTORY_ADDR=${MARKET_FACTORY_ADDRESS}
+      - VITE_RESOLVER_ADDR=${COLLECTIVE_RESOLVER_ADDRESS}
+    networks:
+      - agentmarket
+    depends_on:
+      - agent-a
+    restart: unless-stopped

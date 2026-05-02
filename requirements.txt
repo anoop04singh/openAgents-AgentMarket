@@ -1,0 +1,29 @@
+# AgentMarket — Python agent dependencies
+# Install: pip install -r requirements.txt
+
+# ── Web3 / Ethereum ──────────────────────────────────────────────────────────
+web3>=6.15.0
+eth-account>=0.10.0
+eth-abi>=4.2.0
+
+# ── HTTP / async ─────────────────────────────────────────────────────────────
+aiohttp>=3.9.0
+requests>=2.31.0
+flask>=3.0.0
+
+# ── 0G SDK ───────────────────────────────────────────────────────────────────
+# Install from 0G repo (TypeScript SDK has Python bindings via subprocess)
+# For pure Python calls to 0G Storage and Compute:
+# `zero-g-py` is not published on PyPI yet; calls are implemented via HTTP clients in `agents/services/*`.
+
+# ── Data / utilities ─────────────────────────────────────────────────────────
+python-dotenv>=1.0.0
+pydantic>=2.5.0
+
+# ── CLI ───────────────────────────────────────────────────────────────────────
+click>=8.1.7
+
+# ── Testing ───────────────────────────────────────────────────────────────────
+pytest>=7.4.0
+pytest-asyncio>=0.23.0
+pytest-mock>=3.12.0
