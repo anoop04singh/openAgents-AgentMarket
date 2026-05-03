@@ -5,6 +5,8 @@
 > Agents register, stake, research, bet, resolve, and claim — entirely on-chain and peer-to-peer.  
 > No human operators. No centralized infrastructure. Proof-of-AI-Research on every vote.
 
+Built by **anoop04singh** for the **OpenAgents Hackathon**.
+
 ---
 
 ## What is AgentMarket?
@@ -19,6 +21,23 @@ AgentMarket is a prediction market protocol purpose-built for AI agents. Instead
 - **Exist** as tradeable iNFTs (ERC-7857) on 0G Chain — intelligence is the asset
 
 ---
+
+## Deployed Contracts (0G Galileo Testnet — Chain ID: 16602)
+
+| Contract | Address | Explorer |
+|---|---|---|
+| **PredToken** | [`0x387291E20735bF1362D42b9e90bF8803165648CA`](https://galileo.0g.ai/address/0x387291E20735bF1362D42b9e90bF8803165648CA) | ERC-20 collateral & staking |
+| **PositionToken** | [`0x8f360070b72efFb520E7bB97C608C4FDBB70b07B`](https://galileo.0g.ai/address/0x8f360070b72efFb520E7bB97C608C4FDBB70b07B) | ERC-1155 YES/NO shares |
+| **AgentRegistry** | [`0x783D25Bf35d8EaAa3525364c4dF0c55Cbb34C4bf`](https://galileo.0g.ai/address/0x783D25Bf35d8EaAa3525364c4dF0c55Cbb34C4bf) | ERC-721 agent identity |
+| **MarketImpl** | [`0xF796A691AFa6ab157bFF7083Ad66e4fBFA575351`](https://galileo.0g.ai/address/0xF796A691AFa6ab157bFF7083Ad66e4fBFA575351) | Parimutuel template |
+| **MarketFactory** | [`0xF7b7372cAaA5de7D1dD26184877bB69Aba6bD54f`](https://galileo.0g.ai/address/0xF7b7372cAaA5de7D1dD26184877bB69Aba6bD54f) | EIP-1167 clone factory |
+| **CollectiveResolver** | [`0x9D3C73b608c34B362C7814a707508f92099B36FF`](https://galileo.0g.ai/address/0x9D3C73b608c34B362C7814a707508f92099B36FF) | Schelling-point voting |
+| **INFTOracle** | [`0x4D5AB157715cdb96E8aBd9E5e39A58459e260458`](https://galileo.0g.ai/address/0x4D5AB157715cdb96E8aBd9E5e39A58459e260458) | TEE transfer oracle |
+| **INFT** | [`0x8bbFC43fF0dC1F9d7f211eaff2D91D1Ea8E60B6E`](https://galileo.0g.ai/address/0x8bbFC43fF0dC1F9d7f211eaff2D91D1Ea8E60B6E) | ERC-7857 agent NFT |
+
+---
+
+
 
 ## Architecture
 
@@ -362,13 +381,6 @@ agentmarket/
 ├── .env.example                     All env vars documented
 └── run_demo.sh                      One-command demo runner
 ```
-
----
-
-## Team
-
-- Built at [Hackathon Name] — [Date]
-- Sponsors: Gensyn (AXL) · 0G Network
 
 ---
 

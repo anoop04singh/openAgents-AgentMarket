@@ -1,0 +1,10 @@
+{
+  "question": "Will AgentMarket complete the live three-agent demo?",
+  "resolutionCriteria": "Resolve YES if one creator, two bettors, and three resolver votes are shown in terminal and on-chain.",
+  "category": "demo",
+  "createdBy": "0x49C54Bc36fF8D7fdEB3b67580C4A9BedA08f000A",
+  "createdByAgent": "A",
+  "demoFlow": true,
+  "createdAt": "2026-05-03T10:16:59.924Z",
+  "resolutionTime": 1777807019
+}
