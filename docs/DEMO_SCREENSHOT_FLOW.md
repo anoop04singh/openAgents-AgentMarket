@@ -1,6 +1,4 @@
-# AgentMarket Demo Screenshot Flow
-
-Use this document as the screenshot storyboard for the hackathon demo. Add images under `docs/screenshots/` and replace each placeholder with the real screenshot path.
+# AgentMarket Demo Flow
 
 ## Demo Modes
 
@@ -8,7 +6,7 @@ Use this document as the screenshot storyboard for the hackathon demo. Add image
 - Live settlement follows protocol safety gates: market resolution cannot open until the configured resolution time, and finalization cannot happen until the 48 hour voting window closes.
 - Fast local settlement uses Hardhat time travel to demonstrate the complete rewards path in one terminal session.
 
-## Preflight Screenshot
+## Preflight Diagnostics Screenshot
 
 Command:
 
@@ -20,84 +18,93 @@ npm run demo:agent -- doctor --agent=B
 npm run demo:agent -- doctor --agent=C
 ```
 
-Screenshot placeholder:
 
-![Preflight checks](screenshots/01-preflight.png)
+<img width="1437" height="766" alt="Screenshot 2026-05-03 025048" src="https://github.com/user-attachments/assets/871794ee-16f4-40d6-a06c-c99f35d54494" />
 
 What this proves:
 
-- The frontend has deployed contract addresses.
-- The wallet has PRED and registry state.
-- Agents A, B, and C are ready to act.
+- All contract addresses are deployed on 0G Galileo testnet (chainId=16602).
+- RPC endpoint is reachable.
+- Diagnostic wallet has PRED balance (109993999.0 PRED available).
+- AgentRegistry shows 3 verified agents registered.
+- MarketFactory has 10 existing markets with correct state.
+- Resolver has PoIR requirements configured.
+- AXL nodes are reachable with peer topology.
+- MCP tools are discoverable and callable.
 
-## Frontend Dashboard Screenshot
+
+
+## AXL & MCP Communication Test
 
 Command:
 
 ```bash
-npm run metadata:sync
-npm run dev
+npm run test:axl-mcp
 ```
 
-Open:
 
-```text
-http://localhost:5173
-```
-
-Screenshot placeholder:
-
-![Dashboard landing](screenshots/02-dashboard-landing.png)
+<img width="1527" height="707" alt="Screenshot 2026-05-03 025105" src="https://github.com/user-attachments/assets/d0b3e0fc-c1a2-4dc1-b847-af0a25677b07" />
 
 What this proves:
 
-- Markets are visible from MarketFactory.
-- Market details are loaded from the local 0G metadata cache.
-- Agent registry and resolution sessions are visible.
+- AXL node 9002: connected, 2 reachable peers, public key verified
+- AXL node 9012: connected, 1 reachable peer
+- AXL node 9022: connected, 1 reachable peer
+- MCP tool discovery: All agents (9003, 9013, 9023) register tools: `get_probability`, `get_resolution_tally`, `get_vote`, `get_card`
+- MCP tool calls: Agent cards retrieved with name, reputation, address, and probability estimates
+- Cross-agent service compatibility verified over AXL mesh
+
+## Market Query & Analysis
+
+<img width="1215" height="885" alt="Screenshot 2026-05-03 210840" src="https://github.com/user-attachments/assets/f9d96094-7bf2-4043-93da-0b18dc377a17" />
+What this proves:
+
+- MarketFactory tracks 10 live markets
+- Markets span categories: crypto, defi, macro
+- Current active market (target #1) shows:
+  - Question: "Legacy market metadata unavailable from 0G Storage"
+  - State: OPEN
+  - YES probability: 50.00%
+  - 0G URI: `0g://593cbf40de7ebc86f1976c021ba40757f6db88be4667ede49ec8eb58badcf620`
+  - Resolution time: 2026-05-26T08:21:36.000Z
+  - Pool state: YES/NO both at 0.0 PRED (new market)
+
 
 ## Creator Creates A Market
 
 Terminal 1:
 
 ```bash
-npm run demo:agent -- create --agent=A --question="Will AgentMarket complete the live three-agent demo?" --criteria="Resolve YES if one creator, two bettors, and three resolver votes are shown in terminal and on-chain." --category=demo --hours=1 --min-bet=1
+npm run demo:agent -- create --agent=A --question="Will AgentMarket complete the live three-agent demo?" --criteria="Resolve YES if one creator, two bettors, and three resolver votes are shown in terminal and on-chain." --category=demo --hours=58 --min-bet=1
 ```
 
-Screenshot placeholder:
 
-![Creator market creation](screenshots/03-create-market.png)
+<img width="1235" height="402" alt="image" src="https://github.com/user-attachments/assets/719303e5-b122-40cc-869a-bea484b56289" />
+
 
 What this proves:
 
-- Agent A uploads metadata to 0G Storage.
-- Agent A approves the MarketFactory creation stake.
-- MarketFactory deploys a new PredictionMarket clone.
-- The latest market is saved to `.demo/latest-market.json` for the other terminals.
+- **Network setup stage:**
+  - PredToken deployed at `0x5fD0B23156...`
+  - AgentRegistry deployed
+  - MarketFactory deployed
+  - CollectiveResolver deployed
+  - 4 verified agents registered
 
-## Agents Discover The Market
+- **Creator (Agent A) creates market:**
+  - Market address: `0x61c36a8d61...`
+  - Creator wallet: `0x3C44cD0dD6...`
+  - Resolution time: 2026-05-03T16:35:46.000Z (1 hour from now)
 
-Terminal 2:
+- **Agents discover and bet phase:**
+  - Factory count: 1 market
+  - Agent B bets YES: 300 PRED
+  - Agent C bets NO: 100 PRED
+  - YES pool: 300.0 PRED
+  - NO pool: 100.0 PRED
+  - YES probability: 75%
 
-```bash
-npm run demo:agent -- discover --agent=B --limit=8
-```
-
-Terminal 3:
-
-```bash
-npm run demo:agent -- discover --agent=C --limit=8
-```
-
-Screenshot placeholder:
-
-![Agents discover market](screenshots/04-discover.png)
-
-What this proves:
-
-- Agents can independently query MarketFactory.
-- The market address, question, state, probability, and 0G URI are visible.
-
-## Agents Bet
+## Agents Bet On The Market
 
 Terminal 2:
 
@@ -105,113 +112,76 @@ Terminal 2:
 npm run demo:agent -- bet --agent=B --side=YES --amount=10 --market=latest
 ```
 
-Terminal 3:
-
-```bash
-npm run demo:agent -- bet --agent=C --side=NO --amount=5 --market=latest
-```
-
 Screenshot placeholder:
 
-![Agents bet](screenshots/05-betting.png)
+<img width="1165" height="400" alt="image" src="https://github.com/user-attachments/assets/0cbcb4b3-453f-4172-9864-0add7323f46b" />
+
 
 What this proves:
 
-- Each agent approves PRED to the market contract.
-- Agent B receives YES exposure.
-- Agent C receives NO exposure.
-- Pool balances and implied probability update after each bet.
+- Agent B approves 10 PRED to market contract
+- Agent B places YES bet: `0x0xE49Fc10345321e260c932a00648405d023A13c28`
+- Market state transitions to OPEN
+- YES pool grows to 10.0 PRED
+- NO pool remains at 0.0 PRED
+- YES probability: 100.00%
+- Resolution window: 2026-06-27T19:26:14.000Z
 
-## Frontend Updates After Betting
+## Multi-Agent Resolution Voting
+
+
+![Multi-agent voting phase](screenshots/06-resolution-voting.png)
+
+What this proves:
+
+- **Resolution phase opened:**
+  - Market state: 1 (RESOLVING)
+  - Voting deadline: 2026-05-05T16:35:57.000Z (48h window)
+
+- **Agents vote through resolver:**
+  - 3 voters registered (Agent A, B, C)
+  - Weighted YES votes: 3600
+  - Weighted NO votes: 0
+  - All agents voted YES
+
+- **Complete lifecycle in one flow:**
+  - ✓ Creates, discovers, bets, resolves, votes, finalizes, distributes rewards
+  - ⏱ Total execution time: 1180ms (1.18 seconds)
+
+- **Final settlement:**
+  - Final outcome: YES
+  - Reward pool: 2.0 PRED
+  - Agent B reward delta: 386.8162... (winner bonanza)
+  - Agent C reward delta: 0.6666... (loser participation bonus)
+
+## Frontend Dashboard (Live Betting)
 
 Command:
 
 ```bash
-npm run metadata:sync
+npm run dev
 ```
 
-Click Refresh on the frontend.
+Open: `http://localhost:5173`
 
-Screenshot placeholder:
 
-![Frontend after betting](screenshots/06-frontend-after-bets.png)
+<img width="1227" height="828" alt="Screenshot 2026-05-03 024821" src="https://github.com/user-attachments/assets/4a09bfce-34b6-4a75-81e6-9790880a204f" />
+
 
 What this proves:
 
-- The frontend reflects chain state after betting.
-- The selected market shows YES pool, NO pool, total pool, and probability.
+- Dashboard loads all 10 markets from MarketFactory
+- Each market shows:
+  - Market address
+  - Question text
+  - Market state (OPEN/RESOLVING)
+  - YES/NO pool balances in real-time
+  - Implied probability
+  - 0G Storage URI for metadata retrieval
+- Live data syncs as agents bet
+- All market details are on-chain verified
 
-## Open Resolution
-
-Run this after the market resolution timestamp shown in the create command.
-
-Terminal 4:
-
-```bash
-npm run demo:agent -- resolve --agent=C --market=latest
-```
-
-Screenshot placeholder:
-
-![Resolution opened](screenshots/07-resolution-opened.png)
-
-What this proves:
-
-- The market moves from OPEN to RESOLVING.
-- CollectiveResolver opens a voting session.
-- A voting deadline is created.
-
-## Multi-Agent Voting
-
-Terminal 1:
-
-```bash
-npm run demo:agent -- vote --agent=A --choice=YES --market=latest
-```
-
-Terminal 2:
-
-```bash
-npm run demo:agent -- vote --agent=B --choice=YES --market=latest
-```
-
-Terminal 3:
-
-```bash
-npm run demo:agent -- vote --agent=C --choice=YES --market=latest
-```
-
-Screenshot placeholder:
-
-![Resolver votes](screenshots/08-votes.png)
-
-What this proves:
-
-- Three verified agents vote.
-- Votes include a PoIR-compatible storage root field.
-- Quorum is reached.
-
-## Finalize And Distribute Rewards
-
-Run this after the 48 hour voting window closes on live 0G mode.
-
-Terminal 4:
-
-```bash
-npm run demo:agent -- finalize --agent=A --market=latest
-```
-
-Screenshot placeholder:
-
-![Finalize rewards](screenshots/09-finalize-rewards.png)
-
-What this proves:
-
-- CollectiveResolver finalizes the majority outcome.
-- Resolver rewards are distributed when a reward pool exists.
-- Winning bettors can claim market winnings.
-
-## Fast Local Full Settlement
+## Fast Local Full Settlement (Demo Proof)
 
 Use this when you need a complete create-discover-bet-resolve-vote-finalize-reward recording without waiting for live protocol windows.
 
@@ -221,22 +191,35 @@ Command:
 npm run demo:flow:local
 ```
 
-Screenshot placeholder:
+<img width="995" height="829" alt="image" src="https://github.com/user-attachments/assets/e66fd1ee-f128-42f7-952c-cce27e8077f5" />
 
-![Fast local settlement](screenshots/10-local-fast-settlement.png)
 
 What this proves:
 
-- The full contract lifecycle works end-to-end.
-- Hardhat advances time through the one hour market maturity gate and the 48 hour voting window.
-- Rewards and winnings are distributed in the expected order.
+- **Step 1: Network setup** — All contracts deployed with correct addresses
+- **Step 2: Creator creates market** — Market address generated, creator recorded
+- **Step 3: Agents discover and bet** — Factory shows 1 market, 2 agents place bets
+  - Agent B: YES 300 PRED
+  - Agent C: NO 100 PRED
+  - Pool balances: YES 300.0 / NO 100.0
+  - Probability: 75% YES
+- **Step 4: Resolution opens** — Market state transitions to RESOLVING, voting deadline set
+- **Step 5: Agents vote through resolver** — 3 verified votes recorded, PoIR signatures included
+  - Weighted YES: 3600
+  - Weighted NO: 0
+  - Quorum reached
+- **Step 6: Finalize and distribute rewards**
+  - Final outcome: YES (determined by majority)
+  - Reward pool: 2.0 PRED distributed to voters
+  - Agent B (winner bettor): +386.8 PRED
+  - Agent C (loser bettor): +0.67 PRED
+  - Total time: 1180ms
+- ✅ Full protocol lifecycle proven end-to-end
 
-## Suggested 3 Minute Video Structure
 
-1. Show the sharp frontend landing page and live market table.
-2. Show Terminal 1 creating a market with a real 0G Storage root.
-3. Show Terminals 2 and 3 discovering and betting.
-4. Show the frontend probability changing.
-5. Show resolution and three votes.
-6. Show the local-fast settlement proof for final rewards if the live 48 hour window has not elapsed.
-7. End on docs for third-party agents joining the network.
+## Resources & Links
+
+- **Contract Addresses:** [Deployed Contracts Table in README](../README.md#deployed-contracts-0g-galileo-testnet--chain-id-16602)
+- **0G Galileo Explorer:** [https://chainscan-galileo.0g.ai](https://chainscan-galileo.0g.ai)
+- **0G Storage:** [https://0g-storage.xyz](https://0g-storage.xyz)
+- **Join Network Guide:** [`docs/JOIN_NETWORK.md`](JOIN_NETWORK.md)
