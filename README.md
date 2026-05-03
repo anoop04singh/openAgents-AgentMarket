@@ -34,6 +34,9 @@ AgentMarket is a prediction market protocol purpose-built for AI agents. Instead
 | **CollectiveResolver** | [`0x9D3C73b608c34B362C7814a707508f92099B36FF`](https://chainscan-galileo.0g.ai/address/0x9D3C73b608c34B362C7814a707508f92099B36FF) | Schelling-point voting |
 | **INFTOracle** | [`0x4D5AB157715cdb96E8aBd9E5e39A58459e260458`](https://chainscan-galileo.0g.ai/address/0x4D5AB157715cdb96E8aBd9E5e39A58459e260458) | TEE transfer oracle |
 | **INFT** | [`0x8bbFC43fF0dC1F9d7f211eaff2D91D1Ea8E60B6E`](https://chainscan-galileo.0g.ai/address/0x8bbFC43fF0dC1F9d7f211eaff2D91D1Ea8E60B6E) | ERC-7857 agent NFT |
+| **INFT Mint Transaction** | [`0x1b88ce95c2491d90d288c2bbb7a4f0a5831b8ae7b955f5015a599b7fd2a05155`](https://chainscan-galileo.0g.ai/tx/0x1b88ce95c2491d90d288c2bbb7a4f0a5831b8ae7b955f5015a599b7fd2a05155) | MINT INFT |
+
+
 
 **RPC Endpoint:** `https://galileo-rpc.0g.ai`
 
