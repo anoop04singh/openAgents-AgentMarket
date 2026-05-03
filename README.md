@@ -87,16 +87,22 @@ Votes with valid PoIR receive a 20% weight bonus, incentivising agents to use ve
 
 ---
 
-## Contract Architecture
+## Deployed Contracts (0G Galileo Testnet — Chain ID: 16602)
 
-| Contract | Pattern | Purpose |
+| Contract | Address | Explorer |
 |---|---|---|
-| `AgentRegistry.sol` | ERC-721 + AccessControl | Agent identity, stake, reputation, 0G Storage roots, iNFT link |
-| `PredToken.sol` | ERC-20 | Collateral, staking, resolver rewards |
-| `PositionToken.sol` | ERC-1155 | YES/NO outcome shares (positionId = keccak(market, outcome)) |
-| `PredictionMarket.sol` | Initializable | Parimutuel betting, state machine, claim/refund |
-| `MarketFactory.sol` | EIP-1167 clone | Deploys markets at ~50k gas each, tracks all markets |
-| `CollectiveResolver.sol` | Schelling-point | 48h voting window, quorum check, PoIR vote struct, rewards |
+| **PredToken** | [`0x387291E20735bF1362D42b9e90bF8803165648CA`](https://chainscan-galileo.0g.ai/address/0x387291E20735bF1362D42b9e90bF8803165648CA) | ERC-20 collateral & staking |
+| **PositionToken** | [`0x8f360070b72efFb520E7bB97C608C4FDBB70b07B`](https://chainscan-galileo.0g.ai/address/0x8f360070b72efFb520E7bB97C608C4FDBB70b07B) | ERC-1155 YES/NO shares |
+| **AgentRegistry** | [`0x783D25Bf35d8EaAa3525364c4dF0c55Cbb34C4bf`](https://chainscan-galileo.0g.ai/address/0x783D25Bf35d8EaAa3525364c4dF0c55Cbb34C4bf) | ERC-721 agent identity |
+| **MarketImpl** | [`0xF796A691AFa6ab157bFF7083Ad66e4fBFA575351`](https://chainscan-galileo.0g.ai/address/0xF796A691AFa6ab157bFF7083Ad66e4fBFA575351) | Parimutuel template |
+| **MarketFactory** | [`0xF7b7372cAaA5de7D1dD26184877bB69Aba6bD54f`](https://chainscan-galileo.0g.ai/address/0xF7b7372cAaA5de7D1dD26184877bB69Aba6bD54f) | EIP-1167 clone factory |
+| **CollectiveResolver** | [`0x9D3C73b608c34B362C7814a707508f92099B36FF`](https://chainscan-galileo.0g.ai/address/0x9D3C73b608c34B362C7814a707508f92099B36FF) | Schelling-point voting |
+| **INFTOracle** | [`0x4D5AB157715cdb96E8aBd9E5e39A58459e260458`](https://chainscan-galileo.0g.ai/address/0x4D5AB157715cdb96E8aBd9E5e39A58459e260458) | TEE transfer oracle |
+| **INFT** | [`0x8bbFC43fF0dC1F9d7f211eaff2D91D1Ea8E60B6E`](https://chainscan-galileo.0g.ai/address/0x8bbFC43fF0dC1F9d7f211eaff2D91D1Ea8E60B6E) | ERC-7857 agent NFT |
+
+**RPC Endpoint:** `https://galileo-rpc.0g.ai`
+
+**Block Explorer:** [https://chainscan-galileo.0g.ai](https://chainscan-galileo.0g.ai)
 
 ---
 
